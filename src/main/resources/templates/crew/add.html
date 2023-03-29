@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>导演添加</title>
+    <link rel="stylesheet" th:href="@{/bootstrap4/bootstrap.css}">
+</head>
+<body>
+<th:block th:replace="~{home::nav}"/>
+<div class="container text-center mt-5 mb-3">
+    <h1>添加导演</h1>
+    <form th:action="@{/admin/crew/add}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="crewName">导演名字</label>
+            <input type="text" class="form-control" id="crewName" name="crewName" required>
+        </div>
+        <div class="form-group">
+            <label for="crewProfileImg">导演头像</label>
+            <input type="file" class="form-control" id="crewProfileImg" name="crewImg" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-25">添加导演</button>
+    </form>
+</div>
+<script th:src="@{/jquery/jquery.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.bundle.js}"></script>
+</body>
+</html>

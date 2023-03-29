@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>演员列表</title>
+    <link rel="stylesheet" th:href="@{/bootstrap4/bootstrap.css}">
+</head>
+<body>
+<form class="form-inline mt-1" th:action="@{/admin/cast/search}" method="post" style="justify-content: center">
+    <div class="form-group">
+        <label for="castName">演员名称：</label>
+        <input type="text" class="form-control" id="castName" name="castName" required>
+    </div>
+    &nbsp;&nbsp;
+    <button type="submit" class="btn btn-primary">搜索</button>
+    &nbsp;&nbsp;
+    <button type="reset" class="btn btn-primary" onclick="window.location.href='/admin/cast/addCast'">重置</button>
+</form>
+
+<div class="row text-center" style="margin: 0 auto">
+    <div class="col-3 mt-2" id="a" th:each="cast :${casts}">
+        <div class="card">
+            <img height="222px" th:src="${'http://127.0.0.1:80/imgs/'+cast.castProfileImg}"
+                 class="card-img-top"
+                 alt="...">
+            <div class="card-body text-center">
+                <p class="card-text" th:text="${cast.castName}"></p>
+                <span id="castId" style="display: none" th:text="${cast.castId}"></span>
+            </div>
+        </div>
+        <button id="add" type="button" class="btn btn-primary" onclick="addCast(this)">
+            添加
+        </button>
+        <button id="delete" class="btn btn-outline-danger justify-content-center" style="display: none"
+                onclick="removeCast(this)">
+            删除
+        </button>
+    </div>
+</div>
+
+<script th:src="@{/jquery/jquery.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.bundle.js}"></script>
+<script th:src="@{/layer/layer.js}"></script>
+<script>
+    function addCast(obj) {
+        parent.$("#casts").append($(obj).parent());
+        parent.$("#casts div button[id=add]").remove();
+        parent.$("#casts div button[id=delete]").show();
+        let index = parent.layer.getFrameIndex(window.name);
+        parent.layer.close(index);
+    }
+</script>
+</body>
+</html>

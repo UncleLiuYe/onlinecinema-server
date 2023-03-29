@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuyetech.onlinecinemamanager.mapper.MovieCrewMapper">
+
+    <resultMap id="MovieCrewResultMap" type="com.liuyetech.onlinecinemamanager.domain.MovieCrew">
+        <id property="movieCrewId" column="movie_crew_id" jdbcType="INTEGER"/>
+        <result property="movieCrewMovieId" column="movie_crew_movie_id" jdbcType="INTEGER"/>
+        <result property="movieCrewCrewId" column="movie_crew_crew_id" jdbcType="INTEGER"/>
+        <association property="crew" column="movie_crew_crew_id"
+                     resultMap="com.liuyetech.onlinecinemamanager.mapper.CrewMapper.BaseResultMap"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        movie_crew_id,movie_crew_movie_id,movie_crew_crew_id
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="movieCrewId" keyColumn="movie_crew_id">
+        insert into tb_movie_crew(movie_crew_movie_id, movie_crew_crew_id)
+        values (#{movieCrewMovieId}, #{movieCrewCrewId})
+    </insert>
+
+    <select id="selectList" resultMap="MovieCrewResultMap">
+        select a.*,b.*,c.*
+        from tb_movie_crew a,
+        tb_movie b,
+        tb_crew c
+        where a.movie_crew_movie_id = b.movie_id
+        and a.movie_crew_crew_id = c.crew_id
+        <if test="ew != null and ew.sqlSegment != ''">
+            and ${ew.sqlSegment}
+        </if>
+    </select>
+</mapper>

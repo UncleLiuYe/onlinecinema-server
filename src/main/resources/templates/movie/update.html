@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/bootstrap4/bootstrap.css}">
+</head>
+<body>
+<div class="container m-5">
+    <form th:action="@{/admin/movie/update}" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-3 text-center">
+                <img height="333px" th:src="${'http://127.0.0.1:80/imgs/'+movie.moviePoster}" alt="...">
+                <button type="button" class="btn btn btn-primary mt-2" onclick="changePosterImg()">更改图片</button>
+                <input type="file" style="display: none" id="posterimg" name="moviePoster">
+            </div>
+            <div class="col-9">
+                <div class="form-group">
+                    <label for="movieName">影片名：</label>
+                    <input type="text" class="form-control" id="movieName" name="movieName"
+                           th:value="${movie.movieName}" required>
+                </div>
+                <div class="form-group">
+                    <label for="movieOverview">影片概述：</label>
+                    <textarea class="form-control" id="movieOverview" name="movieOverview" rows="3" required
+                              th:text="${movie.movieOverview}">
+                    </textarea>
+                </div>
+                <div class="form-group">
+                    <label for="movieLang">影片语种：</label>
+                    <input type="text" class="form-control" id="movieLang" name="movieLang"
+                           th:value="${movie.movieLang}"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="movieTagline">影片宣传语：</label>
+                    <input type="text" class="form-control" id="movieTagline" name="movieTagline"
+                           th:value="${movie.movieTagline}">
+                </div>
+                <div class="form-group">
+                    <label for="movieArea">影片地区：</label>
+                    <input type="text" class="form-control" id="movieArea" name="movieArea"
+                           th:value="${movie.movieArea}"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="movieRuntime">影片时长：</label>
+                    <input type="text" class="form-control" id="movieRuntime" name="movieRuntime"
+                           th:value="${movie.movieRuntime}" required>
+                </div>
+                <div class="form-group">
+                    <label for="movieReleaseTime">影片下映时间：</label>
+                    <input type="date" class="form-control" id="movieReleaseTime" name="movieReleaseTime"
+                           th:value="${movie.movieReleaseTime}" required>
+                </div>
+                <div class="form-group">
+                    <label for="movieGenres">影片标签(以 , 号分隔)：</label>
+                    <input type="text" class="form-control" id="movieGenres" name="movieGenres"
+                           th:value="${movie.movieGenres}">
+                </div>
+                <div class="form-group">
+                    <label for="movieType">影片分类：</label>
+                    <select class="form-control" id="movieType" name="movieType">
+                        <option th:each="type:${category}" th:value="${type.categoryId}"
+                                th:text="${type.categoryName}"/>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="moviePrice">影片价格：</label>
+                    <input type="text" class="form-control" id="moviePrice" name="moviePrice"
+                           th:value="${movie.moviePrice}"
+                           required>
+                </div>
+                <div class="form-group">
+                    <label for="movieStatus">影片状态：</label>
+                    <select class="form-control" id="movieStatus" name="movieStatus">
+                        <option th:selected="${movie.movieStatus==1}" value="1">上映</option>
+                        <option th:selected="${movie.movieStatus==0}" value="0">下映</option>
+                    </select>
+                </div>
+
+                <h4 class="mt-5">导演：
+                    <button type="button" class="btn btn-info" onclick="addCrew()">添加导演</button>
+                </h4>
+                <div class="row" id="crews">
+                    <div class="col-3 mt-2" th:each="crew :${crews}">
+                        <div class="card">
+                            <img height="222px" th:src="${'http://127.0.0.1:80/imgs/'+crew.crew.crewProfileImg}"
+                                 class="card-img-top"
+                                 alt="...">
+                            <div class="card-body text-center">
+                                <p class="card-text" th:text="${crew.crew.crewName}"></p>
+                                <span id="crewId" style="display: none" th:text="${crew.crew.crewId}"></span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-danger justify-content-center" onclick="removeCrew(this)">删除
+                        </button>
+                    </div>
+                </div>
+                <h4 class="mt-5">演员：
+                    <button type="button" class="btn btn-info" onclick="addCast()">添加演员</button>
+                </h4>
+                <div class="row" id="casts">
+                    <div class="col-3 mt-2" th:each="cast :${casts}">
+                        <div class="card">
+                            <img height="222px" th:src="${'http://127.0.0.1:80/imgs/'+cast.cast.castProfileImg}"
+                                 class="card-img-top"
+                                 alt="...">
+                            <div class="card-body text-center">
+                                <p class="card-text" th:text="${cast.cast.castName}"></p>
+                                <span id="castId" style="display: none" th:text="${cast.cast.castId}"></span>
+                            </div>
+                        </div>
+                        <button class="btn btn-outline-danger justify-content-center" onclick="removeCast(this)">删除
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <input type="hidden" name="movieId" th:value="${movie.movieId}">
+        <input type="hidden" name="moviePreviewUrl" th:value="${movie.moviePreviewUrl}">
+        <input type="hidden" name="moviePlayUrl" th:value="${movie.moviePlayUrl}">
+        <button type="submit" class="btn btn-primary w-25 text-center" style="display:block;margin: 8px auto;">更新
+        </button>
+    </form>
+</div>
+
+<script th:src="@{/jquery/jquery.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.bundle.js}"></script>
+<script th:src="@{/layer/layer.js}"></script>
+<script th:inline="javascript">
+
+    $("form").on("submit", function () {
+        let casts = {
+            mid: [[${movie.movieId}]],
+            castIds: [],
+        };
+        $.each($("#casts span[id=castId]"), function (i, val) {
+            casts.castIds.push(val.innerHTML);
+        });
+
+        let crews = {
+            mid: [[${movie.movieId}]],
+            crewsIds: [],
+        };
+        $.each($("#crews span[id=crewId]"), function (i, val) {
+            console.log(val.innerHTML);
+            crews.crewsIds.push(val.innerHTML);
+        });
+
+        let result = 0;
+
+        $.ajax({
+            method: "post",
+            contentType: "application/json;charset=utf-8",
+            url: "/admin/cast/updateMovieCasts",
+            data: JSON.stringify(casts),
+            success: (res) => {
+                result += res;
+            },
+            error: (res) => {
+                alert("网络错误！");
+            }
+        });
+
+        console.log(JSON.stringify(crews))
+        $.ajax({
+            method: "post",
+            contentType: "application/json;charset=utf-8",
+            url: "/admin/crew/updateMovieCrews",
+            data: JSON.stringify(crews),
+            success: (res) => {
+                result += res;
+            },
+            error: (res) => {
+                alert("网络错误！");
+            }
+        });
+        if (result === 2) {
+            alert("更新演员和导演成功！");
+        }else{
+            alert("更新演员和导演成功！");
+        }
+
+        parent.layer.closeAll();
+    });
+
+    function deleteMovie(mid) {
+        let x = confirm('确认删除吗?');
+        if (x) {
+            window.location.href = "/admin/movie/delete?mid=" + mid;
+        }
+    }
+
+    function changePosterImg() {
+        $("#posterimg").click();
+    }
+
+    function removeCrew(obj) {
+        $(obj).parent().remove();
+    }
+
+    function removeCast(obj) {
+        $(obj).parent().remove();
+    }
+
+    function addCrew() {
+        layer.open({
+            type: 2,
+            title: "导演列表",
+            skin: 'layui-layer-rim', //加上边框
+            area: ['60%', '60%'], //宽高
+            content: "/admin/crew/addCrew",
+        });
+    }
+
+    function addCast() {
+        layer.open({
+            type: 2,
+            title: "演员列表",
+            skin: 'layui-layer-rim', //加上边框
+            area: ['60%', '60%'], //宽高
+            content: "/admin/cast/addCast",
+        });
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuyetech.onlinecinemamanager.mapper.CastMapper">
+
+    <resultMap id="BaseResultMap" type="com.liuyetech.onlinecinemamanager.domain.Cast">
+        <id property="castId" column="cast_id" jdbcType="INTEGER"/>
+        <result property="castName" column="cast_name" jdbcType="VARCHAR"/>
+        <result property="castCharacter" column="cast_character" jdbcType="VARCHAR"/>
+        <result property="castProfileImg" column="cast_profile_img" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        cast_id,cast_name,cast_character,
+        cast_profile_img
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="castId" keyColumn="cast_id">
+        insert into tb_cast(cast_name, cast_character, cast_profile_img)
+        values (#{castName}, #{castCharacter}, #{castProfileImg})
+    </insert>
+</mapper>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuyetech.onlinecinemamanager.mapper.MovieMapper">
+
+    <resultMap id="BaseResultMap" type="com.liuyetech.onlinecinemamanager.domain.Movie">
+        <id property="movieId" column="movie_id" jdbcType="INTEGER"/>
+        <result property="movieName" column="movie_name" jdbcType="VARCHAR"/>
+        <result property="movieOverview" column="movie_overview" jdbcType="VARCHAR"/>
+        <result property="movieLang" column="movie_lang" jdbcType="VARCHAR"/>
+        <result property="movieTagline" column="movie_tagline" jdbcType="VARCHAR"/>
+        <result property="movieArea" column="movie_area" jdbcType="VARCHAR"/>
+        <result property="movieRuntime" column="movie_runtime" jdbcType="INTEGER"/>
+        <result property="movieStatus" column="movie_status" jdbcType="INTEGER"/>
+        <result property="movieReleaseTime" column="movie_release_time" jdbcType="VARCHAR"/>
+        <result property="movieGenres" column="movie_genres" jdbcType="VARCHAR"/>
+        <result property="moviePrice" column="movie_price" jdbcType="DOUBLE"/>
+        <result property="movieType" column="movie_type" jdbcType="INTEGER"/>
+        <result property="moviePoster" column="movie_poster" jdbcType="VARCHAR"/>
+        <result property="moviePreviewUrl" column="movie_preview_url" jdbcType="VARCHAR"/>
+        <result property="moviePlayUrl" column="movie_play_url" jdbcType="VARCHAR"/>
+
+        <association property="category" column="movie_type"
+                     resultMap="com.liuyetech.onlinecinemamanager.mapper.CategoryMapper.BaseResultMap"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        movie_id,movie_name,movie_overview,
+        movie_lang,movie_tagline,movie_area,
+        movie_runtime,movie_status,movie_release_time,
+        movie_genres,movie_price,movie_type,movie_poster,movie_preview_url,movie_play_url
+    </sql>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        select *
+        from tb_movie a
+        join tb_category b on a.movie_type = b.category_id
+        <if test="ew!=null and ew.sqlSegment!=null and ew.sqlSegment!= ''">
+            and ${ew.sqlSegment}
+        </if>
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="movieId" keyColumn="movie_id">
+        insert into tb_movie(movie_name, movie_overview,
+                             movie_lang, movie_tagline, movie_area,
+                             movie_runtime, movie_status, movie_release_time,
+                             movie_genres, movie_price, movie_type, movie_poster, movie_preview_url, movie_play_url)
+        values ( #{movieName}, #{movieOverview}, #{movieLang}, #{movieTagline}
+               , #{movieArea}, #{movieRuntime}, #{movieStatus}, #{movieReleaseTime}
+               , #{movieGenres}
+               , #{moviePrice}, #{movieType}, #{moviePoster}, #{moviePreviewUrl}
+               , #{moviePlayUrl})
+    </insert>
+
+    <select id="selectPage" resultMap="BaseResultMap">
+        select *
+        from tb_movie a
+        join tb_category b on a.movie_type = b.category_id
+        <if test="ew!=null and ew.sqlSegment!=null and ew.sqlSegment!= ''">
+            and ${ew.sqlSegment}
+        </if>
+    </select>
+</mapper>

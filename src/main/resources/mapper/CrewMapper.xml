@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuyetech.onlinecinemamanager.mapper.CrewMapper">
+
+    <resultMap id="BaseResultMap" type="com.liuyetech.onlinecinemamanager.domain.Crew">
+        <id property="crewId" column="crew_id" jdbcType="INTEGER"/>
+        <result property="crewName" column="crew_name" jdbcType="VARCHAR"/>
+        <result property="crewProfileImg" column="crew_profile_img" jdbcType="VARCHAR"/>
+        <result property="crewJob" column="crew_job" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        crew_id,crew_name,crew_profile_img,
+        crew_job
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="crewId" keyColumn="crew_id">
+        insert into tb_crew(crew_name, crew_profile_img,
+                            crew_job)
+        values (#{crewName}, #{crewProfileImg}, #{crewJob})
+    </insert>
+</mapper>

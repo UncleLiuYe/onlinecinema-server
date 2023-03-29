@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>影片添加</title>
+    <link rel="stylesheet" th:href="@{/bootstrap4/bootstrap.css}">
+</head>
+<body>
+<th:block th:replace="~{home::nav}"/>
+<div class="container text-center mt-5 mb-3">
+    <h1>添加影片</h1>
+    <form th:action="@{/admin/movie/add}" method="post" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="movieName">影片名称</label>
+            <input type="text" class="form-control" id="movieName" name="movieName" required>
+        </div>
+        <div class="form-group">
+            <label for="movieOverview">影片概述</label>
+            <textarea class="form-control" id="movieOverview" name="movieOverview" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="movieLang">影片语种</label>
+            <input type="text" class="form-control" id="movieLang" name="movieLang" required>
+        </div>
+        <div class="form-group">
+            <label for="movieTagline">影片宣传语</label>
+            <input type="text" class="form-control" id="movieTagline" name="movieTagline" required>
+        </div>
+        <div class="form-group">
+            <label for="movieArea">影片地区</label>
+            <input type="text" class="form-control" id="movieArea" name="movieArea" required>
+        </div>
+        <div class="form-group">
+            <label for="movieRuntime">影片时长</label>
+            <input type="text" class="form-control" id="movieRuntime" name="movieRuntime" required>
+        </div>
+        <div class="form-group">
+            <label for="movieReleaseTime">影片下映时间</label>
+            <input type="date" class="form-control" id="movieReleaseTime" name="movieReleaseTime" required>
+        </div>
+        <div class="form-group">
+            <label for="movieGenres">影片标签(以 , 号分隔)</label>
+            <input type="text" class="form-control" id="movieGenres" name="movieGenres" required>
+        </div>
+        <div class="form-group">
+            <label for="movieType">影片分类</label>
+            <select class="form-control" id="movieType" name="movieType">
+                <option th:each="type:${category}" th:value="${type.categoryId}"
+                        th:text="${type.categoryName}"/>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="moviePrice">影片价格</label>
+            <input type="text" class="form-control" id="moviePrice" name="moviePrice" required>
+        </div>
+        <div class="form-group">
+            <label for="moviePoster">影片海报</label>
+            <input type="file" class="form-control" id="moviePoster" name="moviePoster" required>
+        </div>
+        <button type="submit" class="btn btn-primary w-25">添加影片</button>
+    </form>
+</div>
+<script th:src="@{/jquery/jquery.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.bundle.js}"></script>
+</body>
+</html>

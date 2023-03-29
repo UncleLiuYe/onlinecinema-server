@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>登录</title>
+    <link rel="stylesheet" th:href="@{/bootstrap4/bootstrap.css}">
+</head>
+<body class="text-center">
+
+<nav class="navbar navbar-expand navbar-light" style="background-color: #e3f2fd;" th:fragment="nav">
+    <a class="navbar-brand" th:href="@{/admin/home}">柳叶影院后台管理系统</a>
+    <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown"
+               aria-expanded="false">影片管理</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/admin/movie/list}">影片列表</a>
+                <a class="dropdown-item" th:href="@{/admin/movie/add}">影片添加</a>
+                <a class="dropdown-item" th:href="@{/admin/movie/list}">票房统计</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown"
+               aria-expanded="false">分类管理</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/admin/category/list}">分类列表</a>
+                <a class="dropdown-item" th:href="@{/admin/category/add}">分类添加</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown"
+               aria-expanded="false">导演管理</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/admin/crew/list}">导演列表</a>
+                <a class="dropdown-item" th:href="@{/admin/crew/add}">导演添加</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown"
+               aria-expanded="false">演员管理</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/admin/cast/list}">演员列表</a>
+                <a class="dropdown-item" th:href="@{/admin/cast/add}">演员添加</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" role="button" data-toggle="dropdown"
+               aria-expanded="false">影讯管理</a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/admin/news/list}">影讯列表</a>
+                <a class="dropdown-item" th:href="@{/admin/news/add}">影讯添加</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                会员管理
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" th:href="@{/admin/user/list}">会员列表</a>
+            </div>
+        </li>
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-expanded="false">
+                账单管理
+            </a>
+            <div class="dropdown-menu">
+                <a class="dropdown-item" href="@{/admin/order/list}">账单列表</a>
+            </div>
+        </li>
+    </ul>
+    <span class="navbar-text">
+        <span>admin</span>
+    </span>
+</nav>
+
+<div style="width: 88%;margin: 0 auto;">
+    <h1>欢迎使用柳叶影院后台管理系统</h1>
+</div>
+
+<script th:src="@{/jquery/jquery.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.bundle.js}"></script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

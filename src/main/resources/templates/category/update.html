@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/bootstrap4/bootstrap.css}">
+</head>
+<body>
+<div class="container m-5">
+    <form th:action="@{/admin/category/update}" method="post">
+        <div class="form-group">
+            <label for="categoryName">分类名称：</label>
+            <input type="text" class="form-control" id="categoryName" name="categoryName"
+                   th:value="${category.categoryName}" required>
+        </div>
+        <input type="hidden" name="categoryId" th:value="${category.categoryId}">
+        <button type="submit" class="btn btn-primary w-25 text-center" style="display:block;margin: 8px auto;">
+            更新
+        </button>
+    </form>
+</div>
+
+<script th:src="@{/jquery/jquery.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.bundle.js}"></script>
+<script th:src="@{/layer/layer.js}"></script>
+<script th:inline="javascript">
+
+    $("form").on("submit", function () {
+        parent.layer.closeAll();
+    });
+</script>
+</body>
+</html>

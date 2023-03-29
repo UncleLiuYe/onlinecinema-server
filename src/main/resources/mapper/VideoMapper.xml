@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuyetech.onlinecinemamanager.mapper.VideoMapper">
+
+    <resultMap id="VideoResultMap" type="com.liuyetech.onlinecinemamanager.domain.Video">
+        <id property="videoId" column="video_id" jdbcType="INTEGER"/>
+        <result property="videoName" column="video_name" jdbcType="VARCHAR"/>
+        <result property="videoArea" column="video_area" jdbcType="VARCHAR"/>
+        <result property="videoLang" column="video_lang" jdbcType="VARCHAR"/>
+        <result property="videoBlurb" column="video_blurb" jdbcType="VARCHAR"/>
+        <result property="videoDuration" column="video_duration" jdbcType="INTEGER"/>
+        <result property="videoTag" column="video_tag" jdbcType="VARCHAR"/>
+        <result property="videoReleaseTime" column="video_release_time" jdbcType="TIMESTAMP"/>
+        <result property="videoDirector" column="video_director" jdbcType="VARCHAR"/>
+        <result property="videoActor" column="video_actor" jdbcType="OTHER"/>
+        <result property="videoMoney" column="video_money" jdbcType="DECIMAL"/>
+        <result property="videoType" column="video_type" jdbcType="VARCHAR"/>
+        <result property="videoPreviewUrl" column="video_preview_url" jdbcType="VARCHAR"/>
+        <result property="videoPlayUrl" column="video_play_url" jdbcType="VARCHAR"/>
+        <result property="videoImg" column="video_img" jdbcType="VARCHAR"/>
+
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        video_id,video_name,video_area,
+        video_lang,video_blurb,video_duration,
+        video_tag,video_release_time,video_director,
+        video_actor,video_money,video_type,video_img,video_preview_url,video_play_url
+    </sql>
+
+    <select id="selectById" resultMap="VideoResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM tb_video where video_id = #{id} limit 1
+    </select>
+
+    <select id="selectList" resultMap="VideoResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM tb_video
+        <if test="ew != null and ew.sqlSegment != ''">
+            where ${ew.sqlSegment}
+        </if>
+    </select>
+</mapper>

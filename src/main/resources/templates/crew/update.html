@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/bootstrap4/bootstrap.css}">
+</head>
+<body>
+<div class="container m-5">
+    <form th:action="@{/admin/crew/update}" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-3 text-center">
+                <img height="333px" th:src="${'http://127.0.0.1:80/imgs/'+crew.crewProfileImg}" alt="...">
+                <button type="button" class="btn btn btn-primary mt-2" onclick="changePosterImg()">更改图片</button>
+                <input type="file" style="display: none" id="posterimg" name="crewImg">
+            </div>
+            <div class="col-9">
+                <div class="form-group">
+                    <label for="crewName">导演名：</label>
+                    <input type="text" class="form-control" id="crewName" name="crewName"
+                           th:value="${crew.crewName}" required>
+                </div>
+                <input type="hidden" name="crewId" th:value="${crew.crewId}">
+                <button type="submit" class="btn btn-primary w-25 text-center" style="display:block;margin: 8px auto;">
+                    更新
+                </button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script th:src="@{/jquery/jquery.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.bundle.js}"></script>
+<script th:src="@{/layer/layer.js}"></script>
+<script th:inline="javascript">
+
+    $("form").on("submit", function () {
+        parent.layer.closeAll();
+    });
+
+    function changePosterImg() {
+        $("#posterimg").click();
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/bootstrap4/bootstrap.css}">
+</head>
+<body>
+<div class="container m-5">
+    <div class="row">
+        <div class="col-3">
+            <img height="333px" th:src="${'http://127.0.0.1:80/imgs/'+movie.moviePoster}" alt="...">
+        </div>
+        <div class="col-9">
+            <h2 th:text="${movie.movieName}"></h2>
+            <p th:text="${'影片概述: '+movie.movieOverview}"></p>
+            <p th:text="${'影片语种: '+movie.movieLang}"></p>
+            <p th:text="${'影片宣传语: '+movie.movieTagline==null?'无':movie.movieTagline}"></p>
+            <p th:text="${'影片地区: '+movie.movieArea}"></p>
+            <p th:text="${'影片时长: '+movie.movieRuntime+'分钟'}"></p>
+            <p th:text="${'影片状态: '+(movie.movieStatus==1?'上映':'下映')}"></p>
+            <p th:text="${'影片下映时间: '+movie.movieReleaseTime}"></p>
+            <p th:text="${'影片标签: '+movie.movieGenres}"></p>
+            <p th:text="${'影片价格: '+movie.moviePrice+'元'}"></p>
+            <p th:text="${'影片所属分类: '+movie.category.categoryName}"></p>
+            <h4 class="mt-5">导演</h4>
+            <div class="row">
+                <div class="col-3 mt-2" th:each="crew :${crews}">
+                    <div class="card">
+                        <img height="222px" th:src="${'http://127.0.0.1:80/imgs/'+crew.crew.crewProfileImg}"
+                             class="card-img-top"
+                             alt="...">
+                        <div class="card-body text-center">
+                            <p class="card-text" th:text="${crew.crew.crewName}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h4 class="mt-5">演员</h4>
+            <div class="row">
+                <div class="col-3 mt-2" th:each="cast :${casts}">
+                    <div class="card">
+                        <img height="222px" th:src="${'http://127.0.0.1:80/imgs/'+cast.cast.castProfileImg}"
+                             class="card-img-top"
+                             alt="...">
+                        <div class="card-body text-center">
+                            <p class="card-text" th:text="${cast.cast.castName}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/jquery/jquery.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.bundle.js}"></script>
+<script th:src="@{/layer/layer.js}"></script>
+<script th:inline="javascript">
+    function deleteMovie(mid) {
+        let x = confirm('确认删除吗?');
+        if (x) {
+            window.location.href = "/admin/movie/delete?mid=" + mid;
+        }
+    }
+</script>
+</body>
+</html>

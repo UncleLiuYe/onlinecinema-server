@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuyetech.onlinecinemamanager.mapper.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.liuyetech.onlinecinemamanager.domain.User">
+        <id property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="userName" column="user_name" jdbcType="VARCHAR"/>
+        <result property="userPassword" column="user_password" jdbcType="VARCHAR"/>
+        <result property="userNickname" column="user_nickname" jdbcType="VARCHAR"/>
+        <result property="userAvator" column="user_avator" jdbcType="VARCHAR"/>
+        <result property="userSex" column="user_sex" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        user_id,user_name,user_password,
+        user_nickname,user_avator,user_sex
+    </sql>
+</mapper>

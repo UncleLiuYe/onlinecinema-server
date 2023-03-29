@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuyetech.onlinecinemamanager.mapper.NewsMapper">
+
+    <resultMap id="BaseResultMap" type="news">
+        <id property="newsId" column="news_id" jdbcType="INTEGER"/>
+        <result property="newsContent" column="news_content" jdbcType="VARCHAR"/>
+        <result property="newsCreatetime" column="news_createtime" jdbcType="TIMESTAMP"/>
+        <result property="newsTitle" column="news_title" jdbcType="VARCHAR"/>
+        <result property="newsTagline" column="news_tagline" jdbcType="VARCHAR"/>
+        <result property="newsCreaterId" column="news_creater_id" jdbcType="INTEGER"/>
+
+        <association property="user" column="news_creater_id"
+                     resultMap="com.liuyetech.onlinecinemamanager.mapper.UserMapper.BaseResultMap"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        news_id,news_content,news_createtime,
+        news_title,news_tagline,news_creater_id
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="newsId" keyColumn="news_id">
+        insert into tb_news(news_content, news_createtime, news_title, news_tagline, news_creater_id)
+        values (#{newsContent}, #{newsCreatetime}, #{newsTitle}, #{newsTagline}, #{newsCreaterId})
+    </insert>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        select a.*,b.*
+        from tb_news a
+        join tb_user b
+        on a.news_creater_id = b.user_id
+        <if test="ew != null and ew.sqlSegment!=null and ew.sqlSegment != ''">
+            and ${ew.sqlSegment}
+        </if>
+    </select>
+
+    <select id="selectPage" resultMap="BaseResultMap">
+        select a.*,b.*
+        from tb_news a
+        join tb_user b
+        on a.news_creater_id = b.user_id
+        <if test="ew!=null and ew.sqlSegment!=null and ew.sqlSegment!= ''">
+            and ${ew.sqlSegment}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuyetech.onlinecinemamanager.mapper.OrderMapper">
+
+    <resultMap id="OrderBaseResultMap" type="order">
+        <id property="orderId" column="order_id" jdbcType="INTEGER"/>
+        <result property="tradeNo" column="trade_no" jdbcType="VARCHAR"/>
+        <result property="alipayTradeNo" column="alipay_trade_no" jdbcType="VARCHAR"/>
+        <result property="totalAmount" column="total_amount" jdbcType="DECIMAL"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="status" column="status" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        order_id,trade_no,alipay_trade_no,
+        total_amount,create_time,update_time,
+        user_id,status
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="orderId" keyColumn="order_id">
+        insert into tb_order(trade_no, alipay_trade_no,
+                             total_amount, create_time, update_time,
+                             user_id, status)
+        values (#{tradeNo}, '', #{totalAmount}, #{createTime}, #{updateTime}, #{userId}, #{status})
+    </insert>
+
+    <select id="selectList" resultMap="OrderBaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from tb_order where 1 = 1
+        <if test="ew != null and ew.sqlSegment != ''">
+            and ${ew.sqlSegment}
+        </if>
+    </select>
+</mapper>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>影讯添加</title>
+    <link rel="stylesheet" th:href="@{/bootstrap4/bootstrap.css}">
+    <link href="https://unpkg.com/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5 mb-3">
+    <h1 class="text-center">添加分类</h1>
+    <form th:action="@{/admin/category/add}" method="post">
+        <div class="form-group">
+            <label for="categoryName">分类名称</label>
+            <input type="text" class="form-control" id="categoryName" name="categoryName" required>
+        </div>
+        <div class="container text-center">
+            <button type="submit" class="btn btn-primary w-25 mt-2 text-center">添加影讯</button>
+        </div>
+    </form>
+</div>
+<script th:src="@{/jquery/jquery.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.bundle.js}"></script>
+<script src="https://unpkg.com/@wangeditor/editor@latest/dist/index.js"></script>
+<script>
+
+    $("form").submit(function () {
+        parent.layer.closeAll();
+    });
+</script>
+</body>
+</html>
