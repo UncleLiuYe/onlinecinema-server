@@ -17,6 +17,19 @@ public class MainInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {
         request.setCharacterEncoding("utf-8");
+        //管理员登录判断逻辑
+        if (request.getRequestURI().contains("/admin")) {
+            if (request.getSession().getAttribute("admin") != null) {
+                return true;
+            } else {
+                response.setContentType("text/html;charset=utf-8");
+                request.setAttribute("msg", "需要登录！");
+                request.getRequestDispatcher(request.getContextPath() + "/admin/login").forward(request, response);
+                return false;
+            }
+        }
+
+        //客户端用户登录判断逻辑
         if (request.getHeader("onlinecinema") != null) {
             response.setContentType("application/json;charset=utf-8");
             long timeout = StpUtil.getTokenTimeout();
@@ -27,17 +40,12 @@ public class MainInterceptor implements HandlerInterceptor {
             } else if (timeout < 5) {
                 StpUtil.renewTimeout(10);
             }
-            return true;
-        }
-
-        if (request.getSession().getAttribute("admin") != null) {
-            return true;
         } else {
-            response.setContentType("text/html;charset=utf-8");
-            request.setAttribute("msg", "需要登录！");
-            request.getRequestDispatcher(request.getContextPath() + "admin/login").forward(request, response);
+            response.setStatus(401);
+            response.getWriter().println(objectMapper.writeValueAsString("token无效"));
             return false;
         }
+        return true;
     }
 
     @Override

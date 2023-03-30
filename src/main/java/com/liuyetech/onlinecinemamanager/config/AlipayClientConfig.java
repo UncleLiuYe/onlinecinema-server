@@ -21,8 +21,6 @@ public class AlipayClientConfig {
     @Bean
     public AlipayClient alipayClient() throws AlipayApiException {
         AlipayConfig config = new AlipayConfig();
-
-        log.info(this.merchantPrivateKey);
         //设置appId
         config.setAppId(appId);
         //设置商户私钥

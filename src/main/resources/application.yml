@@ -66,6 +66,12 @@ ali-pay:
   gateway-url: https://openapi.alipaydev.com/gateway.do
   notify-url: http://liuye.gz2vip.91tunnel.com/api/v1/pay/notify
 
+ali-oss:
+  end-point: oss-cn-beijing.aliyuncs.com
+  bucket-name: onlinecinema
+  key-id: LTAI5tLupzsqBxBewv2Wby2u
+  key-secret: EM2WINdvqGFr2TZz0f1Q2M5zRZhn94
+
 nginx:
   img-path: E:\nginx\html\imgs
   movie-preview-path: http://192.168.1.2:80/preivew
