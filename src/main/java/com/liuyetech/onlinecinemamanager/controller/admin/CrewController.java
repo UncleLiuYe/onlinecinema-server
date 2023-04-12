@@ -1,5 +1,7 @@
 package com.liuyetech.onlinecinemamanager.controller.admin;
 
+import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -11,15 +13,12 @@ import com.liuyetech.onlinecinemamanager.service.MovieCrewService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +35,8 @@ public class CrewController {
     @Autowired
     private MovieCrewService movieCrewService;
 
-    @Value("${nginx.img-path}")
-    private String nginxImgPath;
+    @Autowired
+    private OSSClient ossClient;
 
     @GetMapping("list")
     public String crewList(Integer currentPage, ModelMap modelMap) {
@@ -112,16 +111,19 @@ public class CrewController {
             modelMap.addAttribute("url", "/admin/home");
             return "msg";
         }
-        File file = new File(nginxImgPath + "/" + crewImg.getOriginalFilename());
-        if (!file.exists()) {
-            try {
-                crewImg.transferTo(new File(nginxImgPath + "/" + crewImg.getOriginalFilename()));
-            } catch (IOException e) {
-                e.printStackTrace();
-                modelMap.addAttribute("msg", "文件上传失败！");
-                modelMap.addAttribute("url", "/admin/home");
-                return "msg";
+        try {
+            boolean isExists = ossClient.doesObjectExist("onlinecinema", crewImg.getOriginalFilename());
+            if (!isExists) {
+                PutObjectRequest putObjectRequest = new PutObjectRequest("onlinecinema"
+                        , "image/" + crewImg.getOriginalFilename(), crewImg.getInputStream());
+                putObjectRequest.setProcess("true");
+                ossClient.putObject(putObjectRequest);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            modelMap.addAttribute("msg", "文件上传失败！");
+            modelMap.addAttribute("url", "/admin/home");
+            return "msg";
         }
 
         Map<String, String[]> params = request.getParameterMap();
@@ -152,14 +154,15 @@ public class CrewController {
         String fileName = null;
         if (crewImg != null && crewImg.getSize() > 0) {
             try {
-                File file = new File(nginxImgPath + "/" + crewImg.getOriginalFilename());
-                if (!file.exists()) {
-                    crewImg.transferTo(new File(nginxImgPath + "/" + crewImg.getOriginalFilename()));
-                    fileName = "/" + crewImg.getOriginalFilename();
-                } else {
-                    fileName = "/" + crewImg.getOriginalFilename();
+                boolean isExists = ossClient.doesObjectExist("onlinecinema", crewImg.getOriginalFilename());
+                if (!isExists) {
+                    PutObjectRequest putObjectRequest = new PutObjectRequest("onlinecinema"
+                            , "image/" + crewImg.getOriginalFilename(), crewImg.getInputStream());
+                    putObjectRequest.setProcess("true");
+                    ossClient.putObject(putObjectRequest);
                 }
-            } catch (IOException e) {
+                fileName = "/" + crewImg.getOriginalFilename();
+            } catch (Exception e) {
                 e.printStackTrace();
                 modelMap.addAttribute("msg", "文件上传失败！");
                 modelMap.addAttribute("url", "/admin/home");

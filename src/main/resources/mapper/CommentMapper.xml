@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuyetech.onlinecinemamanager.mapper.CommentMapper">
+
+    <resultMap id="BaseResultMap" type="comment">
+        <id property="commentId" column="comment_id" jdbcType="INTEGER"/>
+        <result property="commentUserId" column="comment_user_id" jdbcType="INTEGER"/>
+        <result property="commentNewsId" column="comment_news_id" jdbcType="INTEGER"/>
+        <result property="commentContent" column="comment_content" jdbcType="VARCHAR"/>
+        <result property="commentCreateTime" column="comment_create_time" jdbcType="TIMESTAMP"/>
+        <association property="user" column="comment_user_id"
+                     resultMap="com.liuyetech.onlinecinemamanager.mapper.UserMapper.BaseResultMap"/>
+        <association property="news" column="comment_news_id"
+                     resultMap="com.liuyetech.onlinecinemamanager.mapper.NewsMapper.BaseResultMap"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        comment_id,comment_user_id,comment_news_id,
+    comment_content,comment_create_time
+    </sql>
+
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="commentId" keyColumn="comment_id">
+        insert into tb_comment(comment_user_id, comment_news_id, comment_content, comment_create_time)
+        values (#{commentUserId}, #{commentNewsId}, #{commentContent}, #{commentCreateTime})
+    </insert>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        select a.*,b.*,c.*
+        from tb_comment a,tb_user b,tb_news c
+        where a.comment_user_id=b.user_id and a.comment_news_id = c.news_id
+        <if test="ew != null and ew.sqlSegment!=null and ew.sqlSegment != ''">
+            and ${ew.sqlSegment}
+        </if>
+    </select>
+
+    <select id="selectPage" resultMap="BaseResultMap">
+        select a.*,b.*,c.*
+        from tb_comment a,tb_user b,tb_news c
+        where a.comment_user_id=b.user_id and a.comment_news_id = c.news_id
+        <if test="ew!=null and ew.sqlSegment!=null and ew.sqlSegment!= ''">
+            and ${ew.sqlSegment}
+        </if>
+    </select>
+</mapper>

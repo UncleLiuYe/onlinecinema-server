@@ -1,5 +1,7 @@
 package com.liuyetech.onlinecinemamanager.controller.admin;
 
+import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -7,15 +9,12 @@ import com.liuyetech.onlinecinemamanager.domain.News;
 import com.liuyetech.onlinecinemamanager.service.NewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,8 +26,8 @@ public class AdminNewsController {
     @Autowired
     private NewsService newsService;
 
-    @Value("${nginx.img-path}")
-    private String nginxImgPath;
+    @Autowired
+    private OSSClient ossClient;
 
     @GetMapping("list")
     public String newsList(Integer currentPage, ModelMap modelMap) {
@@ -42,20 +41,27 @@ public class AdminNewsController {
 
     @PostMapping("upload")
     @ResponseBody
-    public Map<String, Object> upload(MultipartFile file) throws IOException {
+    public Map<String, Object> upload(MultipartFile file) {
         Map<String, Object> res = new HashMap<>();
         if (file.isEmpty()) {
             res.put("errno", 1);
             res.put("message", "文件为空");
             return res;
         }
-        File uploadFile = new File(nginxImgPath + "/" + file.getOriginalFilename());
-        if (!uploadFile.exists()) {
-            file.transferTo(uploadFile);
+        try {
+            boolean isExists = ossClient.doesObjectExist("onlinecinema", file.getOriginalFilename());
+            if (!isExists) {
+                PutObjectRequest putObjectRequest = new PutObjectRequest("onlinecinema"
+                        , "image/" + file.getOriginalFilename(), file.getInputStream());
+                putObjectRequest.setProcess("true");
+                ossClient.putObject(putObjectRequest);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         res.put("errno", 0);
         Map<String, String> data = new HashMap<>();
-        data.put("url", "http://192.168.1.2:80/imgs/" + file.getOriginalFilename());
+        data.put("url", "https://onlinecinema.oss-cn-beijing.aliyuncs.com/image/" + file.getOriginalFilename());
         data.put("alt", "...");
         res.put("data", data);
         return res;

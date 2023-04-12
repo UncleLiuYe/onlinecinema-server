@@ -1,5 +1,8 @@
 package com.liuyetech.onlinecinemamanager.controller;
 
+import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.model.PutObjectRequest;
+import com.aliyun.oss.model.PutObjectResult;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.liuyetech.onlinecinemamanager.domain.*;
 import com.liuyetech.onlinecinemamanager.entity.CastCrewEntity;
@@ -8,7 +11,6 @@ import com.liuyetech.onlinecinemamanager.entity.R;
 import com.liuyetech.onlinecinemamanager.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,11 +45,8 @@ public class MovieController {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Value("${nginx.movie-preview-path}")
-    private String moviePreviewPath;
-
-    @Value("${nginx.movie-play-path}")
-    private String moviePlayPath;
+    @Autowired
+    private OSSClient ossClient;
 
     @GetMapping("list")
     public R<List<Movie>> getAllMovie(Integer cid) {
@@ -105,7 +103,7 @@ public class MovieController {
     public String insert(String mid) {
         String lang = "zh-CN";
         String apiKey = "104b4d668774615ed7603ade245521a9";
-        String url = "https://api.themoviedb.org/3/movie/%s?api_key=%s&language=%s";
+        String url = "http://api.themoviedb.org/3/movie/%s?api_key=%s&language=%s";
         String finalUrl = url.formatted(mid, apiKey, lang);
         ResponseEntity<MovieEntity> responseEntity = restTemplate.getForEntity(finalUrl, MovieEntity.class);
         if (responseEntity.getStatusCodeValue() != 200) {
@@ -124,13 +122,17 @@ public class MovieController {
             default -> movie.setMovieLang(mLang);
         }
         movie.setMovieTagline(moviee.getTagline() == null ? "" : moviee.getTagline());
-        String area = moviee.getProductionCountries().get(0).getIso31661();
-        switch (area) {
-            case "US" -> movie.setMovieArea("美国");
-            case "CN" -> movie.setMovieArea("中国");
-            case "JP" -> movie.setMovieArea("日本");
-            case "KR" -> movie.setMovieArea("韩国");
-            default -> movie.setMovieArea(area);
+        if (moviee.getProductionCountries().size() > 0) {
+            String area = moviee.getProductionCountries().get(0).getIso31661();
+            switch (area) {
+                case "US" -> movie.setMovieArea("美国");
+                case "CN" -> movie.setMovieArea("中国");
+                case "JP" -> movie.setMovieArea("日本");
+                case "KR" -> movie.setMovieArea("韩国");
+                default -> movie.setMovieArea(area);
+            }
+        } else {
+            movie.setMovieArea("");
         }
         movie.setMovieRuntime(moviee.getRuntime());
         movie.setMovieStatus(1);
@@ -142,15 +144,16 @@ public class MovieController {
         movie.setMovieType(0);
         movie.setMoviePoster(moviee.getPosterPath());
         downLoadImage(moviee.getPosterPath());
-        movie.setMoviePreviewUrl("");
-        movie.setMoviePlayUrl("");
+        movie.setMoviePreviewUrl(mid + "/" + mid + ".m3u8");
+        movie.setMoviePlayUrl(mid + "/" + mid + ".m3u8");
+
         int mres = movieService.getBaseMapper().insert((movie));
         if (mres <= 0) {
             return "movie insert fail";
         }
         int nmid = movie.getMovieId();
 
-        String castCrewurl = "https://api.themoviedb.org/3/movie/%s/credits?api_key=%s&language=%s";
+        String castCrewurl = "http://api.themoviedb.org/3/movie/%s/credits?api_key=%s&language=%s";
         String finalCastCrewUrl = castCrewurl.formatted(mid, apiKey, lang);
         ResponseEntity<CastCrewEntity> castCrewEntityResponseEntity = restTemplate.getForEntity(finalCastCrewUrl, CastCrewEntity.class);
         if (castCrewEntityResponseEntity.getStatusCodeValue() != 200) {
@@ -221,18 +224,16 @@ public class MovieController {
     }
 
     private void downLoadImage(String url) {
-        String finalUrl = "https://image.tmdb.org/t/p/w500/" + url;
+        String finalUrl = "http://image.tmdb.org/t/p/w500/" + url;
         ResponseEntity<byte[]> responseEntity = restTemplate.exchange(finalUrl, HttpMethod.GET, null, byte[].class);
         //获取entity中的数据
         byte[] body = responseEntity.getBody();
-        //创建输出流  输出到本地
-        FileOutputStream fileOutputStream;
-        try {
-            fileOutputStream = new FileOutputStream("D:\\nginx\\html\\imgs\\" + url.replace("/", ""));
-            fileOutputStream.write(body);
-            fileOutputStream.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        String key = "image/" + url.replace("/", "");
+        PutObjectRequest putObjectRequest = new PutObjectRequest("onlinecinema", key, new ByteArrayInputStream(body));
+        putObjectRequest.setProcess("true");
+        PutObjectResult result = ossClient.putObject(putObjectRequest);
+        if (!result.getResponse().isSuccessful()) {
+            log.info("{}:上传失败", url);
         }
     }
 }

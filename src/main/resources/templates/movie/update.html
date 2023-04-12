@@ -9,7 +9,8 @@
     <form th:action="@{/admin/movie/update}" method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col-3 text-center">
-                <img height="333px" th:src="${'http://127.0.0.1:80/imgs/'+movie.moviePoster}" alt="...">
+                <img height="333px"
+                     th:src="${'https://onlinecinema.oss-cn-beijing.aliyuncs.com/image'+movie.moviePoster}" alt="...">
                 <button type="button" class="btn btn btn-primary mt-2" onclick="changePosterImg()">更改图片</button>
                 <input type="file" style="display: none" id="posterimg" name="moviePoster">
             </div>
@@ -178,7 +179,7 @@
         });
         if (result === 2) {
             alert("更新演员和导演成功！");
-        }else{
+        } else {
             alert("更新演员和导演成功！");
         }
 

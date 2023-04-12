@@ -9,7 +9,7 @@
     <form th:action="@{/admin/cast/update}" method="post" enctype="multipart/form-data">
         <div class="row">
             <div class="col-3 text-center">
-                <img height="333px" th:src="${'http://127.0.0.1:80/imgs/'+cast.castProfileImg}" alt="...">
+                <img height="333px" th:src="${'https://onlinecinema.oss-cn-beijing.aliyuncs.com/image'+cast.castProfileImg}" alt="...">
                 <button type="button" class="btn btn btn-primary mt-2" onclick="changePosterImg()">更改图片</button>
                 <input type="file" style="display: none" id="posterimg" name="castImg">
             </div>

@@ -46,7 +46,7 @@
                              movie_lang, movie_tagline, movie_area,
                              movie_runtime, movie_status, movie_release_time,
                              movie_genres, movie_price, movie_type, movie_poster, movie_preview_url, movie_play_url)
-        values ( #{movieName}, #{movieOverview}, #{movieLang}, #{movieTagline}
+        values (#{movieName}, #{movieOverview}, #{movieLang}, #{movieTagline}
                , #{movieArea}, #{movieRuntime}, #{movieStatus}, #{movieReleaseTime}
                , #{movieGenres}
                , #{moviePrice}, #{movieType}, #{moviePoster}, #{moviePreviewUrl}
@@ -55,8 +55,7 @@
 
     <select id="selectPage" resultMap="BaseResultMap">
         select *
-        from tb_movie a
-        join tb_category b on a.movie_type = b.category_id
+        from tb_movie a, tb_category b where a.movie_type = b.category_id
         <if test="ew!=null and ew.sqlSegment!=null and ew.sqlSegment!= ''">
             and ${ew.sqlSegment}
         </if>

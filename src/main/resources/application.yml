@@ -27,7 +27,7 @@ spring:
     cache: false
   redis:
     database: 0
-    host: localhost
+    host: 172.30.169.123
     port: 6379
     password:
     timeout: 6000ms

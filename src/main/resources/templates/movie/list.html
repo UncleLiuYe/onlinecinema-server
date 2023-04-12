@@ -38,7 +38,7 @@
 <div class="row container text-center" style="margin: 0 auto">
     <div class="col-3" th:each="movie : ${datas.records}">
         <div class="card mt-2">
-            <img height="333px" th:src="${'http://127.0.0.1:80/imgs/'+movie.moviePoster}"
+            <img height="333px" th:src="${'https://onlinecinema.oss-cn-beijing.aliyuncs.com/image'+movie.moviePoster}"
                  class="card-img-top" alt="">
             <div class="card-body">
                 <h5 class="card-title" th:text="${movie.movieName}"></h5>

@@ -25,7 +25,7 @@
             <td th:text="${user.userId}"></td>
             <td th:text="${user.userName}"></td>
             <td th:text="${user.userNickname}"></td>
-            <td><img th:src="${'http://localhost:80/imgs/'+user.userAvator}" height="100px" alt=".."></td>
+            <td><img th:src="${'https://onlinecinema.oss-cn-beijing.aliyuncs.com/image/'+user.userAvator}" height="100px" alt=".."></td>
             <td th:text="${user.userSex==1?'男':'女'}"></td>
             <td>
                 <button class="btn btn-primary" th:onclick="updateCategory([[${user.userId}]])">修改</button>

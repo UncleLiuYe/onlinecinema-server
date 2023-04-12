@@ -1,5 +1,7 @@
 package com.liuyetech.onlinecinemamanager.controller.admin;
 
+import com.aliyun.oss.OSSClient;
+import com.aliyun.oss.model.PutObjectRequest;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -13,7 +15,6 @@ import com.liuyetech.onlinecinemamanager.service.MovieService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -24,8 +25,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 
@@ -45,8 +44,8 @@ public class AdminMovieController {
     @Autowired
     private MovieCrewService movieCrewService;
 
-    @Value("${nginx.img-path}")
-    private String nginxImgPath;
+    @Autowired
+    private OSSClient ossClient;
 
     @GetMapping("list")
     public String movieList(Integer currentPage, ModelMap modelMap) {
@@ -100,14 +99,15 @@ public class AdminMovieController {
         String fileName = null;
         if (moviePoster != null && moviePoster.getSize() > 0) {
             try {
-                File file = new File(nginxImgPath + "/" + moviePoster.getOriginalFilename());
-                if (!file.exists()) {
-                    moviePoster.transferTo(new File(nginxImgPath + "/" + moviePoster.getOriginalFilename()));
-                    fileName = "/" + moviePoster.getOriginalFilename();
-                } else {
-                    fileName = "/" + moviePoster.getOriginalFilename();
+                boolean isExists = ossClient.doesObjectExist("onlinecinema", moviePoster.getOriginalFilename());
+                if (!isExists) {
+                    PutObjectRequest putObjectRequest = new PutObjectRequest("onlinecinema"
+                            , "image/" + moviePoster.getOriginalFilename(), moviePoster.getInputStream());
+                    putObjectRequest.setProcess("true");
+                    ossClient.putObject(putObjectRequest);
                 }
-            } catch (IOException e) {
+                fileName = "/" + moviePoster.getOriginalFilename();
+            } catch (Exception e) {
                 e.printStackTrace();
                 modelMap.addAttribute("msg", "文件上传失败！");
                 modelMap.addAttribute("url", "/admin/home");
@@ -144,16 +144,19 @@ public class AdminMovieController {
             modelMap.addAttribute("url", "/admin/home");
             return "msg";
         }
-        File file = new File(nginxImgPath + "/" + moviePoster.getOriginalFilename());
-        if (!file.exists()) {
-            try {
-                moviePoster.transferTo(new File(nginxImgPath + "/" + moviePoster.getOriginalFilename()));
-            } catch (IOException e) {
-                e.printStackTrace();
-                modelMap.addAttribute("msg", "文件上传失败！");
-                modelMap.addAttribute("url", "/admin/home");
-                return "msg";
+        try {
+            boolean isExists = ossClient.doesObjectExist("onlinecinema", moviePoster.getOriginalFilename());
+            if (!isExists) {
+                PutObjectRequest putObjectRequest = new PutObjectRequest("onlinecinema"
+                        , "image/" + moviePoster.getOriginalFilename(), moviePoster.getInputStream());
+                putObjectRequest.setProcess("true");
+                ossClient.putObject(putObjectRequest);
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            modelMap.addAttribute("msg", "文件上传失败！");
+            modelMap.addAttribute("url", "/admin/home");
+            return "msg";
         }
         Map<String, String[]> params = request.getParameterMap();
         Movie movie = new Movie();
