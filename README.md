@@ -1,4 +1,4 @@
-# 使用Spring Boot框架编写服务器端程序，向Android客户端和管理客户端提供数据接口，以及服务器端核心功能：
+# 使用Spring Boot框架编写服务器端程序，向Android客户端和管理客户端提供数据接口，以及服务器端核心功能：<br/>
 本端正在积极开发中❤！
 ## 1、Mybatis进行持久化数据管理
 ## 2、Spring-data-redis和SpringSession提供用户会话信息、观影厅基本信息、观众信息、在播影片信息的缓存
