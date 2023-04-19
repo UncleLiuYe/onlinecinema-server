@@ -27,7 +27,7 @@ spring:
     cache: false
   redis:
     database: 0
-    host: 172.30.169.123
+    host: 172.17.78.5
     port: 6379
     password:
     timeout: 6000ms
@@ -51,7 +51,7 @@ mybatis-plus:
 
 sa-token:
   token-name: onlinecinema
-  timeout: 3600
+  timeout: 10
   activity-timeout: -1
   is-concurrent: false
   is-share: false
