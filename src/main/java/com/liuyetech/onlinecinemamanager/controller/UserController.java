@@ -74,7 +74,7 @@ public class UserController {
         user.setUserPassword(userRegisterVo.getPassword());
         user.setUserNickname("user" + Instant.now().toEpochMilli());
         user.setUserSex(1);
-        user.setUserAvator(userRegisterVo.getAvatarImgPath());
+        user.setUserAvator("/" + userRegisterVo.getAvatarImgPath());
         if (userService.save(user)) {
             return R.success("注册成功");
         } else {

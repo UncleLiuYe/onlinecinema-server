@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liuyetech.onlinecinemamanager.mapper.TicketMapper">
+
+    <resultMap id="BaseResultMap" type="com.liuyetech.onlinecinemamanager.domain.Ticket">
+        <id property="ticketId" column="ticket_id" jdbcType="INTEGER"/>
+        <result property="ticketNo" column="ticket_no" jdbcType="VARCHAR"/>
+        <result property="ticketUserId" column="ticket_user_id" jdbcType="INTEGER"/>
+        <result property="ticketMovieId" column="ticket_movie_id" jdbcType="INTEGER"/>
+        <result property="ticketExpireTime" column="ticket_expire_time" jdbcType="TIMESTAMP"/>
+        <result property="ticketCreateTime" column="ticket_create_time" jdbcType="TIMESTAMP"/>
+        <association property="user" resultMap="com.liuyetech.onlinecinemamanager.mapper.UserMapper.BaseResultMap"/>
+        <association property="movie" resultMap="com.liuyetech.onlinecinemamanager.mapper.MovieMapper.BaseResultMap"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        ticket_id,ticket_no,ticket_user_id,
+        ticket_movie_id,ticket_expire_time,ticket_create_time
+    </sql>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        select a.*,b.*,c.*
+        from tb_ticket a,tb_user b, tb_movie c where a.ticket_user_id=b.user_id and a.ticket_movie_id =c.movie_id
+        <if test="ew!=null and ew.sqlSegment!=null and ew.sqlSegment!= ''">
+            and ${ew.sqlSegment}
+        </if>
+    </select>
+</mapper>
