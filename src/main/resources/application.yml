@@ -27,7 +27,7 @@ spring:
     cache: false
   redis:
     database: 0
-    host: 172.17.78.5
+    host: 172.27.225.148
     port: 6379
     password:
     timeout: 6000ms
@@ -51,7 +51,7 @@ mybatis-plus:
 
 sa-token:
   token-name: onlinecinema
-  timeout: 10
+  timeout: 3600
   activity-timeout: -1
   is-concurrent: false
   is-share: false
@@ -65,14 +65,10 @@ ali-pay:
   ali-pay-public-key: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAlgTohSGUsv6FbqlwGG1FRDe/bu9Uqai2+ZDwymIrXKSdD1VcXoywRjD2N9ymAf+C4cn3P/ymWBK4Ef4eYByt/9oUfeVf2kUCLoClbGu2hIgXGidWf5lqwUzSwg5/Vro7IuBRpKg6D/xV2wN1KPvM9DopjworPFeVaAUhPLFeDFk8jjXStT8SlznMeeLNmMFcnhpPrrwDxDUOH0AIYSECR0EGn/+QokUztVkEVa5MnrEsNta3Ss1cGYrK5mNUmjuYiZUwwao268nwuHaZqgyXX6up9IIMatlpSzvTuhTiAiqtbNN0BiodfN7tnNp820wJgsYsRksKlPeNKI3sQj6ZKQIDAQAB
   gateway-url: https://openapi.alipaydev.com/gateway.do
   notify-url: http://liuye.gz2vip.91tunnel.com/api/v1/pay/notify
+#  notify-url: http://liuyetech.com:8888/api/v1/pay/notify
 
 ali-oss:
   end-point: oss-cn-beijing.aliyuncs.com
   bucket-name: onlinecinema
   key-id: LTAI5tLupzsqBxBewv2Wby2u
   key-secret: EM2WINdvqGFr2TZz0f1Q2M5zRZhn94
-
-nginx:
-  img-path: E:\nginx\html\imgs
-  movie-preview-path: http://192.168.1.2:80/preivew
-  movie-play-path: http://192.168.1.2:80/video

@@ -8,7 +8,8 @@
 <div class="container m-5">
     <div class="row">
         <div class="col-3">
-            <img height="333px" th:src="${'https://onlinecinema.oss-cn-beijing.aliyuncs.com/image'+movie.moviePoster}" alt="...">
+            <img height="333px" th:src="${'https://onlinecinema.oss-cn-beijing.aliyuncs.com/image'+movie.moviePoster}"
+                 alt="...">
         </div>
         <div class="col-9">
             <h2 th:text="${movie.movieName}"></h2>
@@ -26,7 +27,8 @@
             <div class="row">
                 <div class="col-3 mt-2" th:each="crew :${crews}">
                     <div class="card">
-                        <img height="222px" th:src="${'https://onlinecinema.oss-cn-beijing.aliyuncs.com/image'+crew.crew.crewProfileImg}"
+                        <img height="222px"
+                             th:src="${'https://onlinecinema.oss-cn-beijing.aliyuncs.com/image'+crew.crew.crewProfileImg}"
                              class="card-img-top"
                              alt="...">
                         <div class="card-body text-center">
@@ -39,7 +41,8 @@
             <div class="row">
                 <div class="col-3 mt-2" th:each="cast :${casts}">
                     <div class="card">
-                        <img height="222px" th:src="${'https://onlinecinema.oss-cn-beijing.aliyuncs.com/image'+cast.cast.castProfileImg}"
+                        <img height="222px"
+                             th:src="${'https://onlinecinema.oss-cn-beijing.aliyuncs.com/image'+cast.cast.castProfileImg}"
                              class="card-img-top"
                              alt="...">
                         <div class="card-body text-center">

@@ -37,7 +37,6 @@ public class UserController {
 
     @PostMapping("login")
     public R<String> userLogin(@RequestBody @Validated LoginVo loginVo, HttpServletRequest request) {
-        log.info(request.getSession().getId());
         Object code = request.getSession().getAttribute("code");
         if (code == null || !loginVo.getCaptchaCode().equalsIgnoreCase(code.toString())) {
             return R.fail("验证码错误");
@@ -56,8 +55,7 @@ public class UserController {
     }
 
     @PostMapping("register")
-    public R<?> userRegister(@RequestBody UserRegisterVo userRegisterVo, HttpServletRequest request) {
-        log.info(userRegisterVo.toString());
+    public R<?> userRegister(@RequestBody @Validated UserRegisterVo userRegisterVo, HttpServletRequest request) {
         Object code = request.getSession().getAttribute("code");
         if (code == null || !userRegisterVo.getCaptchaCode().equalsIgnoreCase(code.toString())) {
             return R.fail("验证码错误");
@@ -106,16 +104,10 @@ public class UserController {
 
     @GetMapping("captcha")
     public void captcha(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        log.info("验证码SessionId：" + request.getSession().getId());
-        // Set to expire far in the past.
         response.setDateHeader("Expires", 0);
-        // Set standard HTTP/1.1 no-cache headers.
         response.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
-        // Set IE extended HTTP/1.1 no-cache headers (use addHeader).
         response.addHeader("Cache-Control", "post-check=0, pre-check=0");
-        // Set standard HTTP/1.0 no-cache header.
         response.setHeader("Pragma", "no-cache");
-        // return a jpeg
         response.setContentType("image/jpeg");
 
         String text = kaptchaProducer.createText();

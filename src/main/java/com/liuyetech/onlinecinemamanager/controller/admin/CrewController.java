@@ -22,7 +22,6 @@ import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
 @Slf4j
 @Controller
@@ -80,12 +79,6 @@ public class CrewController {
         QueryWrapper<MovieCrew> movieCrewQueryWrapper = new QueryWrapper<>();
         movieCrewQueryWrapper.eq("movie_crew_movie_id", movieCrewVo.getMid());
         List<MovieCrew> movieCrews = movieCrewService.list(movieCrewQueryWrapper);
-        movieCrews.forEach(new Consumer<MovieCrew>() {
-            @Override
-            public void accept(MovieCrew movieCrew) {
-                log.info(movieCrews.toString());
-            }
-        });
         for (MovieCrew movieCrew : movieCrews) {
             movieCrewService.removeById(movieCrew);
         }
@@ -108,7 +101,7 @@ public class CrewController {
     public String addCrew(MultipartFile crewImg, HttpServletRequest request, ModelMap modelMap) throws InvocationTargetException, IllegalAccessException {
         if (crewImg == null || crewImg.isEmpty()) {
             modelMap.addAttribute("msg", "文件不能为空！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/crew/list");
             return "msg";
         }
         try {
@@ -122,7 +115,7 @@ public class CrewController {
         } catch (Exception e) {
             e.printStackTrace();
             modelMap.addAttribute("msg", "文件上传失败！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/crew/list");
             return "msg";
         }
 
@@ -133,11 +126,11 @@ public class CrewController {
 
         if (crewService.save(crew)) {
             modelMap.addAttribute("msg", "添加成功！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/crew/list");
             return "msg";
         }
         modelMap.addAttribute("msg", "添加失败！");
-        modelMap.addAttribute("url", "/admin/home");
+        modelMap.addAttribute("url", "/admin/crew/list");
         return "msg";
     }
 
@@ -165,7 +158,7 @@ public class CrewController {
             } catch (Exception e) {
                 e.printStackTrace();
                 modelMap.addAttribute("msg", "文件上传失败！");
-                modelMap.addAttribute("url", "/admin/home");
+                modelMap.addAttribute("url", "/admin/crew/list");
                 return "msg";
             }
         }
@@ -177,11 +170,11 @@ public class CrewController {
         BeanUtils.populate(crew, params);
         if (crewService.updateById(crew)) {
             modelMap.addAttribute("msg", "更新成功！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/crew/list");
             return "msg";
         }
         modelMap.addAttribute("msg", "更新失败！");
-        modelMap.addAttribute("url", "/admin/home");
+        modelMap.addAttribute("url", "/admin/crew/list");
         return "msg";
     }
 
@@ -190,17 +183,17 @@ public class CrewController {
         try {
             if (crewService.removeById(id)) {
                 modelMap.addAttribute("msg", "删除成功！");
-                modelMap.addAttribute("url", "/admin/home");
+                modelMap.addAttribute("url", "/admin/crew/list");
                 return "msg";
             }
         } catch (Exception e) {
             e.printStackTrace();
             modelMap.addAttribute("msg", "无法删除！当前影片与其他部分存在关系！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/crew/list");
             return "msg";
         }
         modelMap.addAttribute("msg", "删除失败！");
-        modelMap.addAttribute("url", "/admin/home");
+        modelMap.addAttribute("url", "/admin/crew/list");
         return "msg";
     }
 }

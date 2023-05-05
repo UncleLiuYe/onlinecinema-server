@@ -98,11 +98,11 @@ public class AdminNewsController {
     public String deleteNews(@RequestParam("nid") Integer nid, ModelMap modelMap) {
         if (newsService.removeById(nid)) {
             modelMap.addAttribute("msg", "删除成功！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/news/list");
             return "msg";
         }
         modelMap.addAttribute("msg", "删除失败！");
-        modelMap.addAttribute("url", "/admin/home");
+        modelMap.addAttribute("url", "/admin/news/list");
         return "msg";
     }
 

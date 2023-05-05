@@ -34,11 +34,11 @@ public class AdminCategoryController {
     public String categoryUpdate(Category category, ModelMap modelMap) {
         if (categoryService.updateById(category)) {
             modelMap.addAttribute("msg", "更新成功！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/category/list");
             return "msg";
         }
         modelMap.addAttribute("msg", "更新失败！");
-        modelMap.addAttribute("url", "/admin/home");
+        modelMap.addAttribute("url", "/admin/category/list");
         return "msg";
     }
 
@@ -46,11 +46,11 @@ public class AdminCategoryController {
     public String deleteCategory(@RequestParam("cid") Integer cid, ModelMap modelMap) {
         if (categoryService.removeById(cid)) {
             modelMap.addAttribute("msg", "删除成功！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/category/list");
             return "msg";
         }
         modelMap.addAttribute("msg", "删除失败！");
-        modelMap.addAttribute("url", "/admin/home");
+        modelMap.addAttribute("url", "/admin/category/list");
         return "msg";
     }
 
@@ -63,11 +63,11 @@ public class AdminCategoryController {
     public String addCategory(Category category, ModelMap modelMap) {
         if (categoryService.save(category)) {
             modelMap.addAttribute("msg", "添加成功！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/category/list");
             return "msg";
         }
         modelMap.addAttribute("msg", "添加失败！");
-        modelMap.addAttribute("url", "/admin/home");
+        modelMap.addAttribute("url", "/admin/category/list");
         return "msg";
     }
 }

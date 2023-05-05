@@ -110,7 +110,7 @@ public class AdminMovieController {
             } catch (Exception e) {
                 e.printStackTrace();
                 modelMap.addAttribute("msg", "文件上传失败！");
-                modelMap.addAttribute("url", "/admin/home");
+                modelMap.addAttribute("url", "/admin/movie/list");
                 return "msg";
             }
         }
@@ -123,11 +123,11 @@ public class AdminMovieController {
         log.info(movie.toString());
         if (movieService.updateById(movie)) {
             modelMap.addAttribute("msg", "更新成功！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/movie/list");
             return "msg";
         }
         modelMap.addAttribute("msg", "更新失败！");
-        modelMap.addAttribute("url", "/admin/home");
+        modelMap.addAttribute("url", "/admin/movie/list");
         return "msg";
     }
 
@@ -141,7 +141,7 @@ public class AdminMovieController {
     public String addMovie(MultipartFile moviePoster, HttpServletRequest request, ModelMap modelMap) throws InvocationTargetException, IllegalAccessException {
         if (moviePoster == null || moviePoster.isEmpty()) {
             modelMap.addAttribute("msg", "文件不能为空！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/movie/list");
             return "msg";
         }
         try {
@@ -155,7 +155,7 @@ public class AdminMovieController {
         } catch (Exception e) {
             e.printStackTrace();
             modelMap.addAttribute("msg", "文件上传失败！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/movie/list");
             return "msg";
         }
         Map<String, String[]> params = request.getParameterMap();
@@ -168,11 +168,11 @@ public class AdminMovieController {
         log.info(movie.toString());
         if (movieService.save(movie)) {
             modelMap.addAttribute("msg", "添加成功！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/movie/list");
             return "msg";
         }
         modelMap.addAttribute("msg", "添加失败！");
-        modelMap.addAttribute("url", "/admin/home");
+        modelMap.addAttribute("url", "/admin/movie/list");
         return "msg";
     }
 
@@ -202,17 +202,17 @@ public class AdminMovieController {
         try {
             if (movieService.removeById(mid)) {
                 modelMap.addAttribute("msg", "删除成功！");
-                modelMap.addAttribute("url", "/admin/home");
+                modelMap.addAttribute("url", "/admin/movie/list");
                 return "msg";
             }
         } catch (Exception e) {
             e.printStackTrace();
             modelMap.addAttribute("msg", "无法删除！当前影片与其他部分存在关系！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/movie/list");
             return "msg";
         }
         modelMap.addAttribute("msg", "删除失败！");
-        modelMap.addAttribute("url", "/admin/home");
+        modelMap.addAttribute("url", "/admin/movie/list");
         return "msg";
     }
 }

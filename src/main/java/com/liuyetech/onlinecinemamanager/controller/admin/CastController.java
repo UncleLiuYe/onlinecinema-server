@@ -62,7 +62,7 @@ public class CastController {
     public String addCast(MultipartFile castImg, HttpServletRequest request, ModelMap modelMap) throws InvocationTargetException, IllegalAccessException {
         if (castImg == null || castImg.isEmpty()) {
             modelMap.addAttribute("msg", "文件不能为空！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/cast/list");
             return "msg";
         }
         try {
@@ -76,7 +76,7 @@ public class CastController {
         } catch (Exception e) {
             e.printStackTrace();
             modelMap.addAttribute("msg", "文件上传失败！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/cast/list");
             return "msg";
         }
 
@@ -87,11 +87,11 @@ public class CastController {
 
         if (castService.save(cast)) {
             modelMap.addAttribute("msg", "添加成功！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/cast/list");
             return "msg";
         }
         modelMap.addAttribute("msg", "添加失败！");
-        modelMap.addAttribute("url", "/admin/home");
+        modelMap.addAttribute("url", "/admin/cast/list");
         return "msg";
     }
 
@@ -158,7 +158,7 @@ public class CastController {
             } catch (Exception e) {
                 e.printStackTrace();
                 modelMap.addAttribute("msg", "文件上传失败！");
-                modelMap.addAttribute("url", "/admin/home");
+                modelMap.addAttribute("url", "/admin/cast/list");
                 return "msg";
             }
         }
@@ -170,11 +170,11 @@ public class CastController {
         BeanUtils.populate(cast, params);
         if (castService.updateById(cast)) {
             modelMap.addAttribute("msg", "更新成功！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/cast/list");
             return "msg";
         }
         modelMap.addAttribute("msg", "更新失败！");
-        modelMap.addAttribute("url", "/admin/home");
+        modelMap.addAttribute("url", "/admin/cast/list");
         return "msg";
     }
 
@@ -183,17 +183,17 @@ public class CastController {
         try {
             if (castService.removeById(id)) {
                 modelMap.addAttribute("msg", "删除成功！");
-                modelMap.addAttribute("url", "/admin/home");
+                modelMap.addAttribute("url", "/admin/cast/list");
                 return "msg";
             }
         } catch (Exception e) {
             e.printStackTrace();
             modelMap.addAttribute("msg", "无法删除！当前影片与其他部分存在关系！");
-            modelMap.addAttribute("url", "/admin/home");
+            modelMap.addAttribute("url", "/admin/cast/list");
             return "msg";
         }
         modelMap.addAttribute("msg", "删除失败！");
-        modelMap.addAttribute("url", "/admin/home");
+        modelMap.addAttribute("url", "/admin/cast/list");
         return "msg";
     }
 }
