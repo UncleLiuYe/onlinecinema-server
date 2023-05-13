@@ -122,8 +122,15 @@ public class UserController {
         return R.success(userService.getById(uid));
     }
 
+    @PostMapping("logout")
+    public R<String> logout() {
+        Integer uid = Integer.valueOf(StpUtil.getLoginId().toString());
+        StpUtil.logout(uid);
+        return R.success("退出成功");
+    }
+
     @PostMapping("checkToken")
-    public R<String> checkToken(@RequestHeader("onlinecinema") String token) {
+    public R<String> checkToken() {
         return StpUtil.getTokenTimeout() > 0 ? R.success("ok") : R.fail("fail");
     }
 }

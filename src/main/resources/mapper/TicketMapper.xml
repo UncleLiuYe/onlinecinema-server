@@ -11,12 +11,13 @@
         <result property="ticketMovieId" column="ticket_movie_id" jdbcType="INTEGER"/>
         <result property="ticketExpireTime" column="ticket_expire_time" jdbcType="TIMESTAMP"/>
         <result property="ticketCreateTime" column="ticket_create_time" jdbcType="TIMESTAMP"/>
-        <association property="user" resultMap="com.liuyetech.onlinecinemamanager.mapper.UserMapper.BaseResultMap"/>
+        <result property="ticketStatus" column="ticket_status" jdbcType="TINYINT"/>
         <association property="movie" resultMap="com.liuyetech.onlinecinemamanager.mapper.MovieMapper.BaseResultMap"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        ticket_id,ticket_no,ticket_user_id,
+        ticket_id
+        ,ticket_no,ticket_user_id,
         ticket_movie_id,ticket_expire_time,ticket_create_time
     </sql>
 
@@ -27,4 +28,11 @@
             and ${ew.sqlSegment}
         </if>
     </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="ticketId" keyColumn="ticket_id">
+        insert into tb_ticket(ticket_no, ticket_user_id,
+                              ticket_movie_id, ticket_expire_time, ticket_create_time, ticket_status)
+        values (#{ticketNo}, #{ticketUserId}, #{ticketMovieId}, #{ticketExpireTime}, #{ticketCreateTime},
+                #{ticketStatus})
+    </insert>
 </mapper>

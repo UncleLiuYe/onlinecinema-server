@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>账单管理</title>
+    <link rel="stylesheet" th:href="@{/bootstrap4/bootstrap.css}">
+</head>
+<body>
+<th:block th:replace="~{home::nav}"/>
+<div class="container row text-center mt-5" style="margin: 0 auto">
+    <table class="table table-hover table-bordered">
+        <thead>
+        <tr>
+            <th>会员账号</th>
+            <th>订单编号</th>
+            <th>支付宝流水号</th>
+            <th>购买电影名称</th>
+            <th>创建时间</th>
+            <th>更新时间</th>
+            <th>订单状态</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="abc:${datas}">
+            <td th:text="${abc.user.userName}"></td>
+            <td th:text="${abc.order.tradeNo}"></td>
+            <td th:text="${abc.order.alipayTradeNo}"></td>
+            <td th:text="${abc.movie.movieName}"></td>
+            <td th:text="${abc.order.createTime}"></td>
+            <td th:text="${abc.order.updateTime}"></td>
+            <td th:text="${abc.order.status==1?'未支付':'已支付'}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<script th:src="@{/jquery/jquery.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.bundle.js}"></script>
+<script th:src="@{/layer/layer.js}"></script>
+</body>
+</html>

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.ByteArrayInputStream;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -55,6 +56,7 @@ public class MovieController {
         } else {
             QueryWrapper<Movie> movieQueryWrapper = new QueryWrapper<>();
             movieQueryWrapper.eq("movie_type", cid);
+            movieQueryWrapper.le("movie_release_time", LocalDate.now());
             return R.success(movieService.list(movieQueryWrapper));
         }
     }

@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @RestController
 @RequestMapping("api/v1/ticket")
 public class TicketController {
@@ -21,7 +24,12 @@ public class TicketController {
         Integer uid = Integer.valueOf(StpUtil.getLoginId().toString());
         QueryWrapper<Ticket> ticketQueryWrapper = new QueryWrapper<>();
         ticketQueryWrapper.eq("ticket_user_id", uid);
-        return R.success(ticketService.list(ticketQueryWrapper));
+        List<Ticket> tickets = ticketService.list(ticketQueryWrapper);
+        for (Ticket ticket : tickets) {
+            if (ticket.getTicketExpireTime().isBefore(LocalDateTime.now())) {
+                ticket.setTicketStatus(2);
+            }
+        }
+        return R.success(tickets);
     }
-
 }

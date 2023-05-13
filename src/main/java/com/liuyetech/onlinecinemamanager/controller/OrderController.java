@@ -7,6 +7,7 @@ import com.alipay.api.domain.AlipayTradeAppPayModel;
 import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.liuyetech.onlinecinemamanager.domain.Movie;
 import com.liuyetech.onlinecinemamanager.domain.Order;
 import com.liuyetech.onlinecinemamanager.domain.OrderDetail;
@@ -49,7 +50,7 @@ public class OrderController {
     private StringRedisTemplate redisTemplate;
 
     @PostMapping("create")
-    public R<String> createOrder(@RequestBody Movie movie) {
+    public R<String> createOrder(@RequestBody Movie movie) throws JsonProcessingException {
         AlipayTradeAppPayRequest request = new AlipayTradeAppPayRequest();
 
         AlipayTradeAppPayModel alipayTradeAppPayModel = new AlipayTradeAppPayModel();
@@ -65,7 +66,6 @@ public class OrderController {
         AlipayTradeAppPayResponse response;
         try {
             response = alipayClient.sdkExecute(request);
-            log.info(response.toString());
             if (response.isSuccess()) {
                 Order order = new Order();
                 order.setTradeNo(orderNo);

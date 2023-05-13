@@ -1,7 +1,6 @@
 package com.liuyetech.onlinecinemamanager.interceptor;
 
 import cn.dev33.satoken.stp.StpUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -12,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 @Slf4j
 public class MainInterceptor implements HandlerInterceptor {
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public boolean preHandle(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull Object handler) throws Exception {

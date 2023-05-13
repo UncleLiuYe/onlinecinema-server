@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Title</title>
+    <script src="https://cdn.staticfile.org/echarts/5.4.2/echarts.min.js"></script>
+    <link rel="stylesheet" th:href="@{/bootstrap4/bootstrap.css}">
+</head>
+<body>
+<th:block th:replace="~{home::nav}"/>
+<div id="main" style="width: 80%;height:500px;margin: 30px auto;"></div>
+<script th:src="@{/jquery/jquery.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.js}"></script>
+<script th:src="@{/bootstrap4/bootstrap.bundle.js}"></script>
+<script th:inline="javascript">
+    // 基于准备好的dom，初始化echarts实例
+    let myChart = echarts.init(document.getElementById('main'));
+    let data = [[${data}]];
+    let x = [];
+    let y = [];
+    for (let i = 0; i < data.length; i++) {
+        console.log(data[i]);
+        x.push(data[i].movieName);
+        y.push(data[i].totalPrice);
+    }
+    console.log(x);
+    // 指定图表的配置项和数据
+    let option = {
+        title: {
+            text: '票房前5统计'
+        },
+        tooltip: {},
+        legend: {
+            data: ['票房']
+        },
+        xAxis: {
+            data: x
+        },
+        yAxis: {},
+        series: [
+            {
+                name: '总额',
+                type: 'bar',
+                data: y
+            }
+        ]
+    };
+
+    // 使用刚指定的配置项和数据显示图表。
+    myChart.setOption(option);
+</script>
+</body>
+</html>

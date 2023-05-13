@@ -5,9 +5,9 @@
 <mapper namespace="com.liuyetech.onlinecinemamanager.mapper.ActorMapper">
 
     <resultMap id="BaseResultMap" type="com.liuyetech.onlinecinemamanager.domain.Actor">
-            <id property="actorId" column="actor_id" jdbcType="INTEGER"/>
-            <result property="actorName" column="actor_name" jdbcType="VARCHAR"/>
-            <result property="actorAvator" column="actor_avator" jdbcType="VARCHAR"/>
+        <id property="actorId" column="actor_id" jdbcType="INTEGER"/>
+        <result property="actorName" column="actor_name" jdbcType="VARCHAR"/>
+        <result property="actorAvator" column="actor_avator" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="Base_Column_List">

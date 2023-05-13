@@ -9,16 +9,17 @@ import com.alipay.api.request.AlipayTradeAppPayRequest;
 import com.alipay.api.response.AlipayTradeAppPayResponse;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.liuyetech.onlinecinemamanager.domain.Order;
+import com.liuyetech.onlinecinemamanager.domain.OrderDetail;
+import com.liuyetech.onlinecinemamanager.domain.Ticket;
 import com.liuyetech.onlinecinemamanager.entity.R;
+import com.liuyetech.onlinecinemamanager.service.OrderDetailService;
 import com.liuyetech.onlinecinemamanager.service.OrderService;
+import com.liuyetech.onlinecinemamanager.service.TicketService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
@@ -36,11 +37,15 @@ public class PayController {
     private OrderService orderService;
     @Autowired
     private StringRedisTemplate redisTemplate;
-
+    @Autowired
+    private OrderDetailService orderDetailService;
     @Autowired
     private AlipayClient alipayClient;
     @Value("${ali-pay.notify-url}")
     private String notifyUrl;
+
+    @Autowired
+    private TicketService ticketService;
 
     @PostMapping("repay")
     public R<String> rePay(@RequestBody Order order) {
@@ -74,6 +79,7 @@ public class PayController {
         }
     }
 
+    @CrossOrigin
     @PostMapping("notify")
     public String notifyPay(HttpServletRequest request) {
         Map<String, String> params = new HashMap<>();
@@ -114,6 +120,18 @@ public class PayController {
                     }
                     redisTemplate.delete("order:" + order.getTradeNo());
                     orderService.updateById(order);
+                    Ticket ticket = new Ticket();
+                    ticket.setTicketNo(String.valueOf(System.currentTimeMillis()));
+                    ticket.setTicketUserId(order.getUserId());
+                    QueryWrapper<OrderDetail> queryWrapper = new QueryWrapper<>();
+                    queryWrapper.eq("order_id", order.getOrderId());
+                    OrderDetail orderDetail = orderDetailService.getOne(queryWrapper);
+                    ticket.setTicketMovieId(orderDetail.getMovieId());
+                    ticket.setTicketCreateTime(LocalDateTime.now());
+                    ticket.setTicketExpireTime(LocalDateTime.parse(orderDetail.getMovie().getMovieReleaseTime()
+                            , DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+                    ticket.setTicketStatus(1);
+                    ticketService.addTicket(ticket);
                 }
                 return "success";
             }

@@ -10,6 +10,17 @@
         <result property="movieId" column="movie_id" jdbcType="INTEGER"/>
         <result property="price" column="price" jdbcType="DECIMAL"/>
         <result property="num" column="num" jdbcType="INTEGER"/>
+        <association property="movie" column="movie_id"
+                     resultMap="com.liuyetech.onlinecinemamanager.mapper.MovieMapper.BaseResultMap"/>
+    </resultMap>
+
+    <resultMap id="OrderDetailResultMapA" type="com.liuyetech.onlinecinemamanager.entity.OrderDetailVO">
+        <association property="movie" column="movie_id"
+                     resultMap="com.liuyetech.onlinecinemamanager.mapper.MovieMapper.BaseResultMap"/>
+        <association property="order" column="order_id"
+                     resultMap="com.liuyetech.onlinecinemamanager.mapper.OrderMapper.OrderBaseResultMap"/>
+        <association property="user" column="user_id"
+                     resultMap="com.liuyetech.onlinecinemamanager.mapper.UserMapper.BaseResultMap"/>
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -21,4 +32,39 @@
         insert into tb_order_detail(order_id, movie_id, price, num)
         values (#{orderId}, #{movieId}, #{price}, #{num})
     </insert>
+
+    <select id="selectList" resultMap="BaseResultMap">
+        select *
+        from tb_order_detail a,
+        tb_movie b
+        where a.movie_id = b.movie_id
+        <if test="ew!=null and ew.sqlSegment!=null and ew.sqlSegment!= ''">
+            and ${ew.sqlSegment}
+        </if>
+    </select>
+
+    <select id="selectAllOrderDetail" resultMap="OrderDetailResultMapA">
+        select *
+        from tb_order a,
+             tb_order_detail b,
+             tb_movie c,
+             tb_user d
+        where a.order_id = b.order_id
+          and b.movie_id = c.movie_id
+          and a.user_id = d.user_id
+    </select>
+
+    <select id="getTicketStatistics" resultType="com.liuyetech.onlinecinemamanager.entity.TicketStatisticsVO">
+        select count(1) as total_count, c.movie_name, sum(b.price) as total_price
+        from tb_order a,
+             tb_order_detail b,
+             tb_movie c
+        where a.order_id = b.order_id
+          and b.movie_id = c.movie_id
+        group by b.movie_id
+        order by total_price DESC
+        limit 5;
+    </select>
+
+
 </mapper>
